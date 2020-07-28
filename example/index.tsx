@@ -1,13 +1,9 @@
-import React from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import { Button } from 'zero-ui-react'
+import 'zero-ui-react/dist/components/index.css'
 
 
-import { DocHeader, DocSider, DocContent } from '../src/index'
+import { render } from '../src/index'
 
-const App = () => (<div>
-    <DocHeader />
-    <DocSider />
-    <DocContent />
-</div>)
-
-ReactDOM.render(<App />, document.querySelector('#root'))
+render()

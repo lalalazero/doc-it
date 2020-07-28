@@ -1,0 +1,64 @@
+$border-color: lighten(black, 90%);
+
+.demo-card {
+  border: 1px solid $border-color;
+  margin: 20px ;
+}
+.demo-subject {
+  border-top: 1px solid $border-color;
+  position: relative;
+  > span {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    height: 32px;
+    line-height: 32px;
+    margin-top: -16px;
+    background: white;
+    font-weight: 500;
+    padding: 0 6px;
+  }
+}
+.demo-live {
+  padding: 25px 15px;
+}
+.demo-desc {
+  padding: 30px 15px 20px 15px;
+  font-size: 14px;
+  color: lighten(black, 30%);
+  > code {
+    background: lighten(#ddd, 5%);
+    padding: 4px;
+    border-radius: 4px;
+  }
+}
+.demo-action {
+  color: darken($border-color, 20);
+  border-top: 1px dashed $border-color;
+  padding: 10px 0;
+  font-size: 14px;
+  text-align: center;
+  & .zeroUI-icon {
+    vertical-align: middle;
+    fill: darken($border-color, 20);
+    margin: 0 5px;
+  }
+  &.code-visible {
+    border-bottom: 1px dashed $border-color;
+  }
+}
+.demo-code {
+  & > .prism-code {
+    padding: 20px 15px;
+    max-width: 100%;
+    &.language-css {
+      border-top: 1px dashed $border-color;
+    }
+    & > .token-line {
+      max-width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  background: rgb(246, 248, 250);
+}

@@ -2754,6 +2754,11 @@ dot-case@^3.0.3:
     no-case "^3.0.3"
     tslib "^1.10.0"
 
+dot-snake-camel-case-convertor@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.npm.taobao.org/dot-snake-camel-case-convertor/download/dot-snake-camel-case-convertor-0.0.4.tgz#daac06623d1cf5781e56fcd0a97a87ed892e7a77"
+  integrity sha1-2qwGYj0c9XgeVvzQqXqH7Ykuenc=
+
 draft-js@^0.10.0, draft-js@~0.10.0:
   version "0.10.5"
   resolved "https://registry.npm.taobao.org/draft-js/download/draft-js-0.10.5.tgz#bfa9beb018fe0533dbb08d6675c371a6b08fa742"
@@ -5501,6 +5506,11 @@ pretty-error@^2.1.1:
     renderkid "^2.0.1"
     utila "~0.4"
 
+prism-react-renderer@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/prism-react-renderer/download/prism-react-renderer-1.1.1.tgz#1c1be61b1eb9446a146ca7a50b7bcf36f2a70a44"
+  integrity sha1-HBvmGx65RGoUbKelC3vPNvKnCkQ=
+
 process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.npm.taobao.org/process-nextick-args/download/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
@@ -6109,7 +6119,7 @@ rc-util@^5.0.1:
     react-is "^16.12.0"
     shallowequal "^1.1.0"
 
-react-dom@^16.13.1:
+react-dom@^16.13.1, react-dom@^16.8.6:
   version "16.13.1"
   resolved "https://registry.npm.taobao.org/react-dom/download/react-dom-16.13.1.tgz?cache=0&sync_timestamp=1595004803041&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-dom%2Fdownload%2Freact-dom-16.13.1.tgz#c1bd37331a0486c078ee54c4740720993b2e0e7f"
   integrity sha1-wb03MxoEhsB47lTEdAcgmTsuDn8=
@@ -6161,7 +6171,7 @@ react-slick@~0.25.2:
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
 
-react@^16.13.1:
+react@^16.13.1, react@^16.8.6:
   version "16.13.1"
   resolved "https://registry.npm.taobao.org/react/download/react-16.13.1.tgz?cache=0&sync_timestamp=1595004785569&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact%2Fdownload%2Freact-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
   integrity sha1-LoGIIvGpdDEiwGPWQQ2FweOv5I4=
@@ -7835,3 +7845,12 @@ yargs@^13.3.2:
     which-module "^2.0.0"
     y18n "^4.0.0"
     yargs-parser "^13.1.2"
+
+zero-ui-react@^0.0.15:
+  version "0.0.15"
+  resolved "https://registry.npm.taobao.org/zero-ui-react/download/zero-ui-react-0.0.15.tgz#3e8eeb31045108b81c6f48617474803d7523957d"
+  integrity sha1-Po7rMQRRCLgcb0hhdHSAPXUjlX0=
+  dependencies:
+    dot-snake-camel-case-convertor "^0.0.4"
+    react "^16.8.6"
+    react-dom "^16.8.6"
