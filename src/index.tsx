@@ -1,6 +1,5 @@
 import React, { FC, createElement } from 'react'
 import ReactDOM from 'react-dom'
-import { Button, Icon } from 'zero-ui-react'
 import DemoCard from './DemoCard'
 import {
     BrowserRouter as Router,
@@ -19,57 +18,66 @@ const ContentLayout: FC = ({ children }) => <div>
     {children}
 </div>
 
-const ButtonDemo = <Button icon="download">button demo</Button>
-let path1 = '/button'
-let renderNode1 = createElement(DemoCard, {
-    code: 'code of button',
-    title: 'button',
-    desc: 'button的描述'
-}, ButtonDemo)
 
-const IconDemo = <div><Icon name="left"></Icon><Icon name="right"></Icon></div>
-let path2 = '/icon'
-let renderNode2 = createElement(DemoCard, {
-    code: 'code of icon',
-    title: 'icon',
-    desc: 'icon 的描述'
-}, IconDemo)
 
-const App = () => (<div>
-    <HeaderLayout>header</HeaderLayout>
-    <Router>
-        <SiderLayout>
-            sider
-            <ul>
-                <li>
-                    <Link to={path1}>button</Link>
-                </li>
-                <li>
-                    <Link to={path2}>icon</Link>
-                </li>
-            </ul>
-        </SiderLayout>
-        <Switch>
-            <Route path={path1}>
+const App: FC<{ configs: Config[] }> = (props) => {
+    const { configs } = props
+    const links = []
+    const routes = []
+    configs && configs.map(config => {
+        links.push(
+            <Link to={config.path}>{config.title}</Link>
+        )
+        routes.push(
+            <Route path={config.path} key={Math.random()}>
                 <ContentLayout>
-                    content
-                    {renderNode1}
+                    {
+                        createElement(DemoCard, {
+                            code: config.code,
+                            title: config.title,
+                            desc: config.desc
+                        },
+                            config.demo)
+                    }
                 </ContentLayout>
             </Route>
-            <Route path={path2}>
-                <ContentLayout>
-                    content
-                    {renderNode2}
-                </ContentLayout>
-            </Route>
-        </Switch>
-    </Router>
-</div>)
+        )
+    })
+    return (
+        <Router>
+            <div>
+                <HeaderLayout>header</HeaderLayout>
+
+                <SiderLayout>
+                    <p>sider</p>
+                    <ul>
+                        {
+                            links.map(link => <li key={Math.random()}>{link}</li>)
+                        }
+                    </ul>
+                </SiderLayout>
+                <Switch>
+                    {
+                        routes.map(route => route)
+                    }
+                </Switch>
+            </div>
+        </Router>
+
+    )
+}
 
 
+type Config = {
+    code: string,
+    title: string,
+    demo: JSX.Element,
+    path: string,
+    desc: string,
+}
 
-const render = () => {
-    ReactDOM.render(<App />, document.querySelector('#root'))
+const render = (configs: Config[]) => {
+    ReactDOM.render(<App configs={configs} />, document.querySelector('#root'))
 }
 
 export {
