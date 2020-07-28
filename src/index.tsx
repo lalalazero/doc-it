@@ -1,6 +1,11 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 
-const App = () => (<div>hello world</div>)
+const DocHeader = () => <div>doc-header</div>
+const DocSider = () => <div>doc-sider</div>
+const DocContent = () => <div>doc-content</div>
 
-ReactDOM.render(<App />, document.getElementById('root'))
+export {
+    DocHeader,
+    DocSider,
+    DocContent
+}

@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
     entry: {
-        index: './src/index.tsx'
+        index: './example/index.tsx'
     },
     mode: 'none',
     resolve: {
@@ -43,7 +43,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "..", "src", "public", "index.html"),
+            template: path.resolve(__dirname, "..", "public", "index.html"),
             chunks: ['vendors',"index"],
             inject: true
         }),
