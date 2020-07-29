@@ -1,9 +1,9 @@
 #! /usr/bin/env node
 
 console.log('doc-it 12345')
-
-
 const fs = require('fs')
+const webpack = require('webpack')
+
 let template = `<!DOCTYPE html>
 <html lang="en">
 <head>
