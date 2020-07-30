@@ -1,65 +1,43 @@
-# webpack-typescript-react-starter
+# doc-it
 
-一个快速开始搭建项目的脚手架。
+a generator to doc your custom components.
 
-## 功能
-- `webpack` (4.x)
-- `react` `react-dom` (16.x) 
-- `typescript` (3.x)
-- `css` 
-- `less`
-- `scss`
-- `sass`
-- `eslint`
-- `react-router`
-- `redux` & `redux-thunk`
-- `antd` (3.x)
-- `jest`
+**WIP** this is still in working.
 
+##  How it looks like
 
-## 变更记录
+## Usage
 
-从新到旧排列:
-- 给 antd UI 库添加 `babel-plugin-import` 插件
-- 从 `ts-loader` 转向 `babel-loader`
-- 添加 antd UI 库([解决icons都导入的问题](https://github.com/ant-design/babel-plugin-import/issues/352#issuecomment-549652348))
-- 完成 lint 配置
-- 完成样式的支持 `css` `less` `sass` `scss`
-- 完成 `react` `react-dom` `typescript` `webpack` 基础配置
+`npm install --save doc-it`
 
+`doc-it --config .docit.js --dist example`
 
+```js
+// your .docit.js files
+module.exports = {
+    Header: CustomHeaderComponent,
+    Footer: CustomFooterComponent,
+    configs: [
+        {
+            title: 'button',
+            desc: 'button desc',
+            code: 'button code',
+            demo: ButtonDemo
+        }
+    ]
+}
+```
 
-## 依赖
+## Configs
 
-### webpack 相关
+## doc-it cli
 
-`webpack` `webpack-cli` `webpack-dev-server` `webpack-merge` `clean-webpack-plugin` `html-webpack-plugin`
+| option | meaning |
+|---------|-------|
+|--config | specify config file location, default to `.docit.js` |
+|--dist | specify outout directory, default to `example` |
 
-### typescript 相关
+## .docit.js 
+| option | meaning |
+|--------|---------|
 
-`typescript` <del>`ts-loader`</del> `@types/react` `@types/react-dom`
-
-### babel 相关
-
-npm install --save-dev @babel/core @babel/cli @babel/plugin-proposal-class-properties @babel/preset-env @babel/preset-typescript babel-loader @babel/preset-react @babel/plugin-proposal-object-rest-spread babel-plugin-import
-
-
-### react 相关
-
-`react` `react-dom`
-
-### 样式相关
-
-`css-loader` `style-loader` `less-loader` `sass-loader` `node-sass`
-
-### UI 组件库
-
-`antd` `moment`
-
-### 测试相关
-
-### lint 相关
-
-参照[这个](https://www.robertcooper.me/using-eslint-and-prettier-in-a-typescript-project)来配置的
-
-`eslint` `@typescript-eslint/parser` `@typescript-eslint/eslint-plugin` `eslint-plugin-react`
