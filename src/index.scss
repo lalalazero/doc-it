@@ -30,17 +30,21 @@ $click-color: $cyan-7;
 .example-layout {
   min-height: 100vh;
 }
-.logo {
-  margin: 8px;
-  display: inline-block;
-  vertical-align: middle;
-  height: 32px;
-  width: 32px;
-}
+// .logo {
+//   margin: 8px;
+//   display: inline-block;
+//   vertical-align: middle;
+//   height: 32px;
+//   width: 32px;
+// }
 
 .example-header {
   box-shadow: 0 2px 8px $box-shadow-color;
   padding-left: $padding-left;
+  min-height: 32px;
+  line-height: 32px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 
 
 }

@@ -1,9 +1,7 @@
 import React from 'react'
 import { Button, Icon } from 'zero-ui-react'
 import 'zero-ui-react/dist/components/index.css'
-
-
-import { render } from '../src/index'
+import docIt from '../src/index'
 
 let ButtonDemo = <Button type="primary" onClick={() => alert('click')}>primary button</Button>
 let config1 = {
@@ -25,4 +23,13 @@ let config2 = {
     path: '/icon'
 }
 
-render([config1, config2])
+const CustomHeader = <h2>doc-it-example</h2>
+const CustomFooter = <a href="https://github.com/lalalazero/doc-it">lalalazero/doc-it</a>
+
+let docItConfigs = {
+    configs: [config1, config2],
+    Header: CustomHeader,
+    Footer: CustomFooter
+}
+
+docIt(docItConfigs)

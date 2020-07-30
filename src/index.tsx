@@ -10,10 +10,22 @@ import {
 } from 'react-router-dom'
 import './index.scss'
 
+export type Config = {
+    code: string,
+    title: string,
+    demo: JSX.Element,
+    path: string,
+    desc: string,
+}
 
+export type DocItConfigs = {
+    configs: Config[],
+    Header?: JSX.Element,
+    Footer?: JSX.Element
+}
 
-const App: FC<{ configs: Config[] }> = (props) => {
-    const { configs } = props
+const App: FC<DocItConfigs> = (props) => {
+    const { configs, Header: userHeader, Footer: userFooter } = props
     const links = []
     const routes = []
     configs && configs.map(config => {
@@ -38,8 +50,8 @@ const App: FC<{ configs: Config[] }> = (props) => {
     return <Router>
         <Layout className='example-layout'>
             <Header className='example-header'>
-                <span className='logo'></span>
-                header
+                {/* <span className='logo'></span> */}
+                {userHeader}
             </Header>
             <Layout className='example-main'>
                 <Sider className='example-sider'>
@@ -58,29 +70,16 @@ const App: FC<{ configs: Config[] }> = (props) => {
                 </Content>
             </Layout>
             <Footer className='example-footer'>
-                footer
+                {userFooter}
             </Footer>
         </Layout>
     </Router>
 
 }
 
-
-
-
-type Config = {
-    code: string,
-    title: string,
-    demo: JSX.Element,
-    path: string,
-    desc: string,
+const docIt = (props: DocItConfigs) => {
+    ReactDOM.render(<App {...props} />, document.querySelector('#root'))
 }
 
-const render = (configs: Config[]) => {
-    ReactDOM.render(<App configs={configs} />, document.querySelector('#root'))
-}
-
-export {
-    render
-}
+export default docIt
 
