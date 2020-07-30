@@ -1,22 +1,14 @@
 import React, { FC, createElement } from 'react'
 import ReactDOM from 'react-dom'
 import DemoCard from './DemoCard'
+import { Layout, Header, Sider, Content, Footer } from 'zero-ui-react'
 import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    Link,
 } from 'react-router-dom'
-
-const HeaderLayout: FC = ({ children }) => <div>
-    {children}
-</div>
-const SiderLayout: FC = ({ children }) => <div>
-    {children}
-</div>
-const ContentLayout: FC = ({ children }) => <div>
-    {children}
-</div>
+import './index.scss'
 
 
 
@@ -29,8 +21,8 @@ const App: FC<{ configs: Config[] }> = (props) => {
             <Link to={config.path}>{config.title}</Link>
         )
         routes.push(
-            <Route path={config.path} key={Math.random()}>
-                <ContentLayout>
+            <Route path={config.path} exact key={Math.random()}>
+                <Content>
                     {
                         createElement(DemoCard, {
                             code: config.code,
@@ -39,33 +31,41 @@ const App: FC<{ configs: Config[] }> = (props) => {
                         },
                             config.demo)
                     }
-                </ContentLayout>
+                </Content>
             </Route>
         )
     })
-    return (
-        <Router>
-            <div>
-                <HeaderLayout>header</HeaderLayout>
-
-                <SiderLayout>
-                    <p>sider</p>
+    return <Router>
+        <Layout className='example-layout'>
+            <Header className='example-header'>
+                <span className='logo'></span>
+                header
+            </Header>
+            <Layout className='example-main'>
+                <Sider className='example-sider'>
                     <ul>
                         {
                             links.map(link => <li key={Math.random()}>{link}</li>)
                         }
                     </ul>
-                </SiderLayout>
-                <Switch>
-                    {
-                        routes.map(route => route)
-                    }
-                </Switch>
-            </div>
-        </Router>
+                </Sider>
+                <Content className='example-content-wrapper'>
+                    <Switch>
+                        {
+                            routes.map(route => route)
+                        }
+                    </Switch>
+                </Content>
+            </Layout>
+            <Footer className='example-footer'>
+                footer
+            </Footer>
+        </Layout>
+    </Router>
 
-    )
 }
+
+
 
 
 type Config = {
@@ -84,10 +84,3 @@ export {
     render
 }
 
-export {
-    HeaderLayout,
-    SiderLayout,
-    ContentLayout
-}
-
-export { default as DemoCard } from './DemoCard'

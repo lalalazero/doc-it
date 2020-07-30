@@ -32,11 +32,11 @@ const DemoCard: React.FunctionComponent<DemoCardProps> = props => {
             <p className='demo-subject'><span>{title}<Icon name="edit"></Icon></span></p>
             <p className='demo-desc' dangerouslySetInnerHTML={{ __html: desc }}></p>
             <div className={codeVisible ? 'demo-action code-visible' : 'demo-action'}
-                onClick={toggleCode}>
+            >
                 <Tooltip title="复制代码" style={{ fontSize: '12px' }}>
                     <span><Icon name="copy"></Icon></span>
                 </Tooltip>
-                <Tooltip title={!codeVisible ? '查看代码' : '收起代码'} style={{ fontSize: '12px' }}><span>{codeIcon}</span></Tooltip>
+                <Tooltip title={!codeVisible ? '查看代码' : '收起代码'} style={{ fontSize: '12px' }}><span onClick={toggleCode}>{codeIcon}</span></Tooltip>
             </div>
             <div className='demo-code'>
                 {
