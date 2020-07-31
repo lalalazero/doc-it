@@ -1,20 +1,43 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+let templateFilePath = path.resolve(__dirname, "..", "public", "index.html")
+let indexPath = path.resolve(__dirname, '..', 'example', 'index.tsx')
+
 module.exports = {
     entry: {
-        index: './example/index.tsx'
+        index: indexPath
     },
     mode: 'none',
     resolve: {
-        extensions: [".js",".jsx",".ts",".tsx"]
+        extensions: [".js", ".jsx", ".ts", ".tsx"]
     },
     module: {
         rules: [
             {
                 test: /\.(ts|js)x?$/,
-                loader: 'babel-loader', 
                 exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            "@babel/env",
+                            "@babel/typescript",
+                            "@babel/react"
+                        ],
+                        "plugins": [
+                            "@babel/proposal-class-properties",
+                            "@babel/proposal-object-rest-spread",
+                            // [
+                            //     "import", {
+                            //         "libraryName": "antd",
+                            //         "libraryDirectory": "lib",   // default: lib
+                            //         "style": true
+                            //     }
+                            // ]
+                        ]
+                    }
+                }
             },
             {
                 test: /\.css$/,
@@ -23,13 +46,13 @@ module.exports = {
             {
                 test: /\.less$/,
                 use: [
-                    'style-loader', 
-                    'css-loader', 
-                    { 
-                        loader: 'less-loader', 
-                        options: { 
+                    'style-loader',
+                    'css-loader',
+                    {
+                        loader: 'less-loader',
+                        options: {
                             lessOptions: {
-                                javascriptEnabled: true 
+                                javascriptEnabled: true
                             }
                         }
                     }
@@ -43,8 +66,8 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "..", "public", "index.html"),
-            chunks: ['vendors',"index"],
+            template: templateFilePath,
+            chunks: ['vendors', "index"],
             inject: true
         }),
     ],
