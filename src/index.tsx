@@ -2,6 +2,8 @@ import React, { FC, createElement } from 'react'
 import ReactDOM from 'react-dom'
 import DemoCard from './DemoCard'
 import { Layout, Header, Sider, Content, Footer } from 'zero-ui-react'
+import 'zero-ui-react/dist/components/index.css'
+
 import {
     BrowserRouter as Router,
     Switch,
