@@ -1,12 +1,13 @@
 #! /usr/bin/env node
 
 const fs = require('fs')
+const path = require('path')
 const webpack = require('webpack')
 const webpackDevServer = require('webpack-dev-server')
 const program = require('commander')
+const webpackMerge = require('webpack-merge')
 
-const defaultDevConfig = require('../../build/webpack.config.dev')
-const defaultProdConfig = require('../../build/webpack.config.prod')
+const defaultDevConfig = getDefaultDevConfig()
 
 program.command('dev')
     .description('启动 webpack-dev-server 生成文档')
@@ -14,7 +15,7 @@ program.command('dev')
     .option('-d, --dist', 'specify output directory, default to docit', 'docit')
     .action(function(cmd, env) {
         console.log('dev, dev, dev')
-        doDev()
+        doDev(cmd, env)
     })
 
 program.command('build')
@@ -23,13 +24,22 @@ program.command('build')
     .option('-d, --dist', 'specify output directory, default to docit', 'docit')
     .action(function(cmd, env) {
         console.log('build build build')
-        doBuild()
+        doBuild(cmd, env)
     })
     
 program.parse(process.argv)
 
 
-function doDev() {
+function doDev(cmd, env) {
+    let p = path.parse(process.env.PWD)
+    let configFilePath = path.resolve(p.dir, p.base, '.docitrc.js')
+    let configs = require(configFilePath)
+    let outputPath = path.resolve(p.dir, p.base, configs.outputDir)
+    defaultDevConfig.output.path = outputPath
+    defaultDevConfig.devServer.contentBase = outputPath
+    defaultDevConfig.entry = path.resolve(__dirname, '..', '..', 'example/index.tsx')
+    console.log(JSON.stringify(defaultDevConfig,null,2))
+    
     const compiler = webpack(defaultDevConfig)
     const devServerOptions = defaultDevConfig.devServer
     const devServer = new webpackDevServer(compiler, devServerOptions)
@@ -38,7 +48,13 @@ function doDev() {
     })
 }
 
-function doBuild() {
+function getDefaultDevConfig() {
+    const baseConfig = require('../../build/webpack.config.base')
+    const devConfig = require('../../build/webpack.config.dev')
+    return webpackMerge(baseConfig, devConfig) 
+}
+
+function doBuild(cmd, env) {
     webpack(defaultProdConfig, function(err, stats) {
         if (err) {
             throw err
@@ -50,20 +66,3 @@ function doBuild() {
     })
     
 }
-
-// let template = `<!DOCTYPE html>
-// <html lang="en">
-// <head>
-//     <meta charset="UTF-8">
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//     <title>React in TypeScript</title>
-// </head>
-// <body>
-//     <div id="root"></div>
-// </body>
-// </html>`
-// const data = new Uint8Array(Buffer.from(template));
-// fs.writeFile('output.html', data, (err) => {
-//     if (err) throw err;
-//     console.log('The file has been saved!');
-// });
