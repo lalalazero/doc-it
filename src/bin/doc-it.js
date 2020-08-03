@@ -14,7 +14,7 @@ program.command('dev')
     .option('-c, --config', 'specify config file location, default to .docitrc.js', '.docitrc.js')
     .option('-d, --dist', 'specify output directory, default to docit', 'docit')
     .action(function (cmd, env) {
-        console.log('dev, dev, dev')
+        console.log('doc-it cli starts: dev, dev, dev')
         doDev(cmd, env)
     })
 
@@ -23,7 +23,7 @@ program.command('build')
     .option('-c, --config', 'specify config file location, default to .docitrc.js', '.docitrc.js')
     .option('-d, --dist', 'specify output directory, default to docit', 'docit')
     .action(function (cmd, env) {
-        console.log('build build build')
+        console.log('doc-it cli starts: build build build')
         doBuild(cmd, env)
     })
 
@@ -34,7 +34,9 @@ function doDev(cmd, env) {
     let p = path.parse(process.env.PWD)
     fs.access(path.join(p.dir, p.base, '.docitrc.js'), function (err) {
         if (!err) {
-            setupConfig(p)
+            let configFilePath = path.resolve(p.dir, p.base, '.docitrc.js')
+            let configs = require(configFilePath)
+            setupDevConfig(configs)
             const compiler = webpack(defaultDevConfig)
             const devServerOptions = defaultDevConfig.devServer
             const devServer = new webpackDevServer(compiler, devServerOptions)
@@ -50,7 +52,9 @@ function doBuild(cmd, env) {
     let p = path.parse(process.env.PWD)
     fs.access(path.join(p.dir, p.base, '.docitrc.js'), function (err) {
         if (!err) {
-            setupProdConfig(p)
+            let configFilePath = path.resolve(p.dir, p.base, '.docitrc.js')
+            let configs = require(configFilePath)
+            setupProdConfig(configs)
             webpack(defaultProdConfig, function (err, stats) {
                 if (err) {
                     throw err
@@ -65,25 +69,20 @@ function doBuild(cmd, env) {
 
 
 }
-function setupProdConfig(p) {
-    let configFilePath = path.resolve(p.dir, p.base, '.docitrc.js')
-    let configs = require(configFilePath)
-    console.log('configs: ', configs)
+function setupProdConfig(configs) {
+    let p = path.parse(process.env.PWD)
     if (configs.outputDir) {
         let outputPath = path.resolve(p.dir, p.base, configs.outputDir)
-        console.log('outputpath', outputPath)
         defaultProdConfig.output.path = outputPath
     }
 
     if (configs.publicPath) {
         defaultProdConfig.output.publicPath = configs.publicPath
     }
-    console.log('defautProdConfig,', defaultProdConfig)
-    makeEntryFile(configs, p)
+    makeEntryFile(configs)
 }
-function setupConfig(p) {
-    let configFilePath = path.resolve(p.dir, p.base, '.docitrc.js')
-    let configs = require(configFilePath)
+function setupDevConfig(configs) {
+    let p = path.parse(process.env.PWD)
     if (configs.outputDir) {
         let outputPath = path.resolve(p.dir, p.base, configs.outputDir)
         defaultDevConfig.output.path = outputPath
@@ -92,12 +91,15 @@ function setupConfig(p) {
 
     if (configs.publicPath) {
         defaultDevConfig.output.publicPath = configs.publicPath
+        defaultDevConfig.devServer.publicPath = configs.publicPath
+        defaultDevConfig.devServer.contentBasePublicPath = configs.publicPath
     }
-    makeEntryFile(configs, p)
+    makeEntryFile(configs)
 }
 
-function makeEntryFile(configs, p) {
+function makeEntryFile(configs) {
     let demoDir = configs.demoDir || 'components'
+    let p = path.parse(process.env.PWD)
     let resolveDemoDir = path.resolve(p.dir, p.base, demoDir).replace(/\\/g, '/')
     let PLACE_HOLDER_1 = ''
     let PLACE_HOLDER_2 = ''
