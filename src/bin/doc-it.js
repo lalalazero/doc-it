@@ -7,6 +7,7 @@ const webpackDevServer = require('webpack-dev-server')
 const program = require('commander')
 
 const defaultDevConfig = require('../../build/webpack.config.dev')
+const defaultProdConfig = require('../../build/webpack.config.prod')
 
 program.command('dev')
     .description('启动 webpack-dev-server 生成文档')
@@ -34,29 +35,52 @@ function doDev(cmd, env) {
     fs.access(path.join(p.dir, p.base, '.docitrc.js'), function (err) {
         if (!err) {
             setupConfig(p)
+            const compiler = webpack(defaultDevConfig)
+            const devServerOptions = defaultDevConfig.devServer
+            const devServer = new webpackDevServer(compiler, devServerOptions)
+            devServer.listen(3007, 'localhost', () => {
+                console.log('[DOC-IT CLI] start server on http://localhost:3007')
+            })
         }
     })
-    const compiler = webpack(defaultDevConfig)
-    const devServerOptions = defaultDevConfig.devServer
-    const devServer = new webpackDevServer(compiler, devServerOptions)
-    devServer.listen(3007, 'localhost', () => {
-        console.log('[DOC-IT CLI] start server on http://localhost:3007')
-    })
+
 }
 
 function doBuild(cmd, env) {
-    webpack(defaultProdConfig, function (err, stats) {
-        if (err) {
-            throw err
+    let p = path.parse(process.env.PWD)
+    fs.access(path.join(p.dir, p.base, '.docitrc.js'), function (err) {
+        if (!err) {
+            setupProdConfig(p)
+            webpack(defaultProdConfig, function (err, stats) {
+                if (err) {
+                    throw err
+                }
+                if (stats.hasErrors()) {
+                    console.log('[DOC-IT CLI]', stats.toString())
+                }
+                process.stdout.write(stats.toString() + '\n\n')
+            })
         }
-        if (stats.hasErrors()) {
-            console.log('[DOC-IT CLI]', stats.toString())
-        }
-        process.stdout.write(stats.toString() + '\n\n')
     })
 
-}
 
+}
+function setupProdConfig(p) {
+    let configFilePath = path.resolve(p.dir, p.base, '.docitrc.js')
+    let configs = require(configFilePath)
+    console.log('configs: ', configs)
+    if (configs.outputDir) {
+        let outputPath = path.resolve(p.dir, p.base, configs.outputDir)
+        console.log('outputpath', outputPath)
+        defaultProdConfig.output.path = outputPath
+    }
+
+    if (configs.publicPath) {
+        defaultProdConfig.output.publicPath = configs.publicPath
+    }
+    console.log('defautProdConfig,', defaultProdConfig)
+    makeEntryFile(configs, p)
+}
 function setupConfig(p) {
     let configFilePath = path.resolve(p.dir, p.base, '.docitrc.js')
     let configs = require(configFilePath)
@@ -67,17 +91,17 @@ function setupConfig(p) {
     }
 
     if (configs.publicPath) {
-        defaultDevConfig.publicPath = configs.publicPath
+        defaultDevConfig.output.publicPath = configs.publicPath
     }
     makeEntryFile(configs, p)
 }
 
 function makeEntryFile(configs, p) {
     let demoDir = configs.demoDir || 'components'
-    let resolveDemoDir = path.resolve(p.dir, p.base, demoDir).replace(/\\/g,'/')
+    let resolveDemoDir = path.resolve(p.dir, p.base, demoDir).replace(/\\/g, '/')
     let PLACE_HOLDER_1 = ''
     let PLACE_HOLDER_2 = ''
-    if(configs.routes) {
+    if (configs.routes) {
         let importComponentPlaceholderList = []
         let configsStr = 'let configs = [\n'
         configs.routes.map(route => {
@@ -89,8 +113,8 @@ function makeEntryFile(configs, p) {
         PLACE_HOLDER_1 = importComponentPlaceholderList.join('\n')
         PLACE_HOLDER_2 = configsStr
     }
-    let templateFilePath = path.resolve(__dirname, '..', '..','example/index.tpl')
-    let indexFilePath = path.resolve(__dirname, '..', '..','example/index.tsx')
+    let templateFilePath = path.resolve(__dirname, '..', '..', 'example/index.tpl')
+    let indexFilePath = path.resolve(__dirname, '..', '..', 'example/index.tsx')
     let template = fs.readFileSync(templateFilePath, 'utf-8')
     let index = template.replace('PLACE_HOLDER_1', PLACE_HOLDER_1).replace('PLACE_HOLDER_2', PLACE_HOLDER_2)
     fs.writeFileSync(indexFilePath, index)

@@ -14,7 +14,7 @@ let docItConfigs = {
 }
 
 let configs = [
-  { demo: IconDemo, code: 'iconCode', title: 'icon', desc: 'icon的描述', path: '/icon' },
+  { demo: IconDemo, code: 'iconCode', title: 'icon', desc: 'icon的描述描述描述', path: '/icon' },
   { demo: ButtonDemo, code: 'buttonCode', title: 'button', desc: 'button的描述', path: '/button' },
 ]
 docItConfigs.configs = configs
