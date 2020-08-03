@@ -5,7 +5,7 @@ import { Layout, Header, Sider, Content, Footer } from 'zero-ui-react'
 import 'zero-ui-react/dist/components/index.css'
 
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Switch,
     Route,
     Link,
