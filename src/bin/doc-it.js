@@ -98,20 +98,31 @@ function setupDevConfig(configs) {
 }
 
 function makeEntryFile(configs) {
-    let demoDir = configs.demoDir || 'components'
     let p = path.parse(process.env.PWD)
-    let resolveDemoDir = path.resolve(p.dir, p.base, demoDir).replace(/\\/g, '/')
     let PLACE_HOLDER_1 = ''
     let PLACE_HOLDER_2 = ''
     if (configs.routes) {
         let importComponentPlaceholderList = []
-        let configsStr = 'let configs = [\n'
+        let configsStr = 'let routes = [\n'
         configs.routes.map(route => {
-            const { demo, code, title, desc, path } = route
-            importComponentPlaceholderList.push(`import ${demo} from '${resolveDemoDir}/${demo}'`)
-            configsStr += `  { demo: ${demo}, code: '${code}', title: '${title}', desc: '${desc}', path: '${path}' },\n`
+            const { components, path: routePath, menu } = route
+            configsStr += `{ path: '${routePath}', menu: '${menu}', `
+            if(route.components) {
+                configsStr += `components: [`
+                components.map(component => {
+                    const { demo, code, title, desc, span } = component
+                    let resolveDemoDir = path.resolve(p.dir, p.base, demo).replace(/\\/g, '/')
+                    let demoName = demo.indexOf('/') >= 0 ? demo.substr(demo.lastIndexOf('/') + 1) : demo
+                    importComponentPlaceholderList.push(`import ${demoName} from '${resolveDemoDir}'`)
+                    configsStr += `  { demo: ${demoName}, code: '${code}', title: '${title}', desc: '${desc}', span: ${span} },\n`
+                })
+                configsStr += ']'
+            }
+            configsStr += `},\n`
+            
+            
         })
-        configsStr += ']\ndocItConfigs.configs = configs\n'
+        configsStr += ']\ndocItConfigs.routes = routes\n'
         PLACE_HOLDER_1 = importComponentPlaceholderList.join('\n')
         PLACE_HOLDER_2 = configsStr
     }

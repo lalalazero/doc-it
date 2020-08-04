@@ -1,7 +1,7 @@
 import React, { FC, createElement } from 'react'
 import ReactDOM from 'react-dom'
 import DemoCard from './DemoCard'
-import { Layout, Header, Sider, Content, Footer } from 'zero-ui-react'
+import { Layout, Header, Sider, Content, Footer, Row } from 'zero-ui-react'
 import 'zero-ui-react/dist/components/index.css'
 
 import {
@@ -12,39 +12,54 @@ import {
 } from 'react-router-dom'
 import './index.scss'
 
-export type Config = {
+export type RouteConfig = {
+    path: string,
+    menu: string,
+    components: ComponentConfig[]
+}
+
+export type ComponentConfig = {
     code: string,
     title: string,
     demo: JSX.Element,
-    path: string,
     desc: string,
+    span?: number
 }
 
 export type DocItConfigs = {
-    configs: Config[],
+    routes: RouteConfig[],
     Header?: JSX.Element,
     Footer?: JSX.Element
 }
 
 const App: FC<DocItConfigs> = (props) => {
-    const { configs, Header: userHeader, Footer: userFooter } = props
+    const { routes, Header: userHeader, Footer: userFooter } = props
     const links = []
-    const routes = []
-    configs && configs.map(config => {
+    const menus = []
+    routes && routes.map((routeItem, index) => {
+        const { path, menu, components } = routeItem
         links.push(
-            <Link to={config.path}>{config.title}</Link>
+            <Link to={path}>{menu}</Link>
         )
-        routes.push(
-            <Route path={config.path} exact key={Math.random()}>
+        menus.push(
+            <Route path={path} exact key={index}>
                 <Content>
-                    {
-                        createElement(DemoCard, {
-                            code: config.code,
-                            title: config.title,
-                            desc: config.desc
-                        },
-                            config.demo)
-                    }
+                    <Row>
+                        {
+                            components.map((component, idx) => (
+                                createElement(DemoCard, {
+                                    code: component.code,
+                                    title: component.title,
+                                    desc: component.desc,
+                                    key: idx,
+                                    span: component.span,
+                                },
+                                    component.demo)
+                            ))
+
+                        }
+                    </Row>
+
                 </Content>
             </Route>
         )
@@ -59,14 +74,14 @@ const App: FC<DocItConfigs> = (props) => {
                 <Sider className='example-sider'>
                     <ul>
                         {
-                            links.map(link => <li key={Math.random()}>{link}</li>)
+                            links.map((link, idx) => <li key={idx}>{link}</li>)
                         }
                     </ul>
                 </Sider>
                 <Content className='example-content-wrapper'>
                     <Switch>
                         {
-                            routes.map(route => route)
+                            menus.map(menu => menu)
                         }
                     </Switch>
                 </Content>

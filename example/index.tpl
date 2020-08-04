@@ -4,7 +4,7 @@ import docIt from '../src/index'
 PLACE_HOLDER_1
 
 let docItConfigs = {
-    configs: [],
+    routes: [],
     Header: <h2>doc-it-example</h2>,
     Footer: <a href="https://github.com/lalalazero/doc-it">lalalazero/doc-it</a>
 }
