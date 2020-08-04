@@ -3,13 +3,10 @@ import docIt from '../src/index'
 
 PLACE_HOLDER_1
 
-const CustomHeader = <h2>doc-it-example</h2>
-const CustomFooter = <a href="https://github.com/lalalazero/doc-it">lalalazero/doc-it</a>
-
 let docItConfigs = {
     configs: [],
-    Header: CustomHeader,
-    Footer: CustomFooter
+    Header: <h2>doc-it-example</h2>,
+    Footer: <a href="https://github.com/lalalazero/doc-it">lalalazero/doc-it</a>
 }
 
 PLACE_HOLDER_2

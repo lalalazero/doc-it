@@ -115,6 +115,16 @@ function makeEntryFile(configs) {
         PLACE_HOLDER_1 = importComponentPlaceholderList.join('\n')
         PLACE_HOLDER_2 = configsStr
     }
+    if(configs.customHeader) {
+        let headerPath = path.resolve(p.dir, p.base, configs.customHeader).replace(/\\/g, '/')
+        PLACE_HOLDER_1 += `\nimport CustomHeader from '${headerPath}'`
+        PLACE_HOLDER_2 += '\ndocItConfigs.Header = CustomHeader'
+    }
+    if(configs.customFooter) {
+        let footerPath = path.resolve(p.dir, p.base, configs.customFooter).replace(/\\/g, '/')
+        PLACE_HOLDER_1 += `\nimport CustomFooter from '${footerPath}'`
+        PLACE_HOLDER_2 += '\ndocItConfigs.Footer = CustomFooter'
+    }
     let templateFilePath = path.resolve(__dirname, '..', '..', 'example/index.tpl')
     let indexFilePath = path.resolve(__dirname, '..', '..', 'example/index.tsx')
     let template = fs.readFileSync(templateFilePath, 'utf-8')
