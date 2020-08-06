@@ -5,6 +5,7 @@ const path = require('path')
 const webpack = require('webpack')
 const webpackDevServer = require('webpack-dev-server')
 const program = require('commander')
+const mdRender = require('../mdx-loader')
 
 const defaultDevConfig = require('../../build/webpack.config.dev')
 const defaultProdConfig = require('../../build/webpack.config.prod')
@@ -105,22 +106,36 @@ function makeEntryFile(configs) {
         let importComponentPlaceholderList = []
         let configsStr = 'let routes = [\n'
         configs.routes.map(route => {
-            const { components, path: routePath, menu } = route
-            configsStr += `{ path: '${routePath}', menu: '${menu}', `
+            let { path: routePath, menu } = route
+            if(route.mdx) {
+                let mdxFile = path.resolve(p.dir, p.base, route.mdx)
+                let mdxContent = fs.readFileSync(mdxFile, 'utf-8')
+                let { mdxComponents, apiContent } = mdRender(mdxContent)
+                route.components = mdxComponents
+                route.apiContent = apiContent
+            }
+            
             if(route.components) {
+                configsStr += `{ path: '${routePath}', menu: '${menu}', `
                 configsStr += `components: [`
-                components.map(component => {
-                    const { demo, code, title, desc, span } = component
-                    let resolveDemoDir = path.resolve(p.dir, p.base, demo).replace(/\\/g, '/')
+                route.components.map(component => {
+                    let { demo, code, title, desc, span, demoAlias } = component
+                    let mdxPath = route.mdx ? /\.mdx/.test(route.mdx) || /\/index/.test(route.mdx) ? route.mdx.substring(0, route.mdx.lastIndexOf('/')) : route.mdx : ''
+                    let resolveDemoDir = path.resolve(p.dir, p.base, mdxPath, demo).replace(/\\/g, '/')
                     let demoName = demo.indexOf('/') >= 0 ? demo.substr(demo.lastIndexOf('/') + 1) : demo
-                    importComponentPlaceholderList.push(`import ${demoName} from '${resolveDemoDir}'`)
-                    configsStr += `  { demo: ${demoName}, code: '${code}', title: '${title}', desc: '${desc}', span: ${span} },\n`
+                    let importName = demoAlias || demoName
+                    importComponentPlaceholderList.push(`import ${importName} from '${resolveDemoDir}'`)
+                    if(code.indexOf('`') < 0){
+                        code = `'${code}'`
+                    }
+                    if(desc.indexOf('`') < 0){
+                        desc = `'${desc}'`
+                    }
+                    configsStr += `  { demo: ${importName}, code: ${code}, title: '${title}', desc: ${desc}, span: ${span} },\n`
                 })
                 configsStr += ']'
+                configsStr += `},\n`
             }
-            configsStr += `},\n`
-            
-            
         })
         configsStr += ']\ndocItConfigs.routes = routes\n'
         PLACE_HOLDER_1 = importComponentPlaceholderList.join('\n')
