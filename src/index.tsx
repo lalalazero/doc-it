@@ -15,6 +15,7 @@ import './index.scss'
 export type RouteConfig = {
     path: string,
     menu: string,
+    apiContent?: string,
     components: ComponentConfig[]
 }
 
@@ -37,13 +38,13 @@ const App: FC<DocItConfigs> = (props) => {
     const links = []
     const menus = []
     routes && routes.map((routeItem, index) => {
-        const { path, menu, components } = routeItem
+        const { path, menu, components, apiContent } = routeItem
         links.push(
             <Link to={path}>{menu}</Link>
         )
         menus.push(
             <Route path={path} exact key={index}>
-                <Content>
+                <Content className='example-content'>
                     <Row>
                         {
                             components.map((component, idx) => (
@@ -59,6 +60,16 @@ const App: FC<DocItConfigs> = (props) => {
 
                         }
                     </Row>
+                    {
+                        apiContent && <div>
+
+                            <div className='api-container'>
+                                <h2>API</h2>
+                                <div dangerouslySetInnerHTML={{ __html: apiContent }}></div>
+                            </div>
+                        </div>
+                    }
+
 
                 </Content>
             </Route>

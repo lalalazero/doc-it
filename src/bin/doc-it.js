@@ -116,7 +116,7 @@ function makeEntryFile(configs) {
             }
             
             if(route.components) {
-                configsStr += `{ path: '${routePath}', menu: '${menu}', `
+                configsStr += `{ path: '${routePath}', menu: '${menu}', apiContent: ${route.apiContent}, `
                 configsStr += `components: [`
                 route.components.map(component => {
                     let { demo, code, title, desc, span, demoAlias } = component
